@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Compare Results</title>
+    <!-- Add Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .btn-wide {
+            width: 40%;
+            /* Change this value according to your desired width */
+        }
+    </style>
+
+</head>
+
+<body>
+
+
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <img th:src="@{/images/logo.png}" src="../static/images/logo.png" width="auto" height="40"
+                    class="d-inline-block align-top" alt="" />
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto"></ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item active">
+                        <a class="nav-link" th:href="@{/}" href="#">home</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" th:href="@{/shop}" href="#">shop</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" sec:authorize="isAnonymous()" th:href="@{/login}" href="#">login</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/logout}" href="#">logout</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" th:href="@{/build}" href="#">build</a>
+                    </li>
+                    <li class="nav-item active">
+                        <span class="nav-link" th:text="${buildCount}">0</span>
+                    </li>
+                </ul>
+
+            </div>
+        </div>
+    </nav>
+
+
+
+    <div class="container">
+        <h1 class="text-center">Compare Results</h1>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">Properties</th>
+                    <th scope="col">
+                        <div class="d-flex justify-content-center">
+                            <a href="#" th:href="@{/shop/viewcomponent/{id}(id=${selectedComponent1.id})}"
+                                class="btn btn-primary btn-wide">
+                                <span>Add</span>
+                            </a>
+                        </div>
+                    </th>
+                    <th scope="col">
+                        <div class="d-flex justify-content-center">
+                            <a href="#" th:href="@{/shop/viewcomponent/{id}(id=${selectedComponent2.id})}"
+                                class="btn btn-primary btn-wide">
+                                <span>Add</span>
+                            </a>
+                        </div>
+                    </th>
+                </tr>
+
+            </thead>
+            <tbody>
+                <tr>
+                    <th scope="row">Name</th>
+                    <td th:text="${selectedComponent1.name}"></td>
+                    <td th:text="${selectedComponent2.name}"></td>
+                </tr>
+                <tr>
+                    <th scope="row"></th>
+                    <td>
+                        <img height="200px" width="200px"
+                            th:src="@{${'/componentImages/' + selectedComponent1.imageName}}"
+                            th:alt="${selectedComponent1.name}">
+                    </td>
+                    <td>
+                        <img height="200px" width="200px"
+                            th:src="@{${'/componentImages/' + selectedComponent2.imageName}}"
+                            th:alt="${selectedComponent2.name}">
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">Manufacturer</th>
+                    <td th:text="${selectedComponent1.manufacturerName}"></td>
+                    <td th:text="${selectedComponent2.manufacturerName}"></td>
+                </tr>
+                <tr>
+                    <th scope="row">Price</th>
+                    <td th:text="'$' + ${selectedComponent1.price}"></td>
+                    <td th:text="'$' + ${selectedComponent2.price}"></td>
+                </tr>
+
+                <!-- RAM -->
+                <th:block th:if="${componentType == 'RAM'}">
+                    <tr>
+                        <th scope="row">Memory</th>
+                        <td th:text="${selectedComponent1.memory} + 'GB'"></td>
+                        <td th:text="${selectedComponent2.memory} + 'GB'"></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Speed</th>
+                        <td th:text="${selectedComponent1.speed} + 'MHz'"></td>
+                        <td th:text="${selectedComponent2.speed} + 'MHz'"></td>
+                    </tr>
+                </th:block>
+<!-- CPU -->
+<th:block th:if="${componentType == 'CPU'}">
+    <tr>
+        <th scope="row">Series</th>
+        <td th:text="${selectedComponent1.series}"></td>
+        <td th:text="${selectedComponent2.series}"></td>
+    </tr>
+    <tr>
+        <th scope="row">Generation</th>
+        <td th:text="${selectedComponent1.generation}"></td>
+        <td th:text="${selectedComponent2.generation}"></td>
+    </tr>
+    <tr>
+        <th scope="row">Model</th>
+        <td th:text="${selectedComponent1.model}"></td>
+        <td th:text="${selectedComponent2.model}"></td>
+    </tr>
+    <tr>
+        <th scope="row">Core Speed</th>
+        <td th:text="${selectedComponent1.coreSpeed} + ' GHz'"></td>
+        <td th:text="${selectedComponent2.coreSpeed} + ' GHz'"></td>
+    </tr>
+    <tr>
+        <th scope="row">Cores</th>
+        <td th:text="${selectedComponent1.cores}"></td>
+        <td th:text="${selectedComponent2.cores}"></td>
+    </tr>
+</th:block>
+
+                <!-- Storage -->
+                <th:block th:if="${componentType == 'Storage'}">
+                    <tr>
+                        <th scope="row">Type</th>
+                        <td th:text="${selectedComponent1.type}"></td>
+                        <td th:text="${selectedComponent2.type}"></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Capacity</th>
+                        <td th:text="${selectedComponent1.capacity} + 'GB'"></td>
+                        <td th:text="${selectedComponent2.capacity} + 'GB'"></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Cache</th>
+                        <td th:text="${selectedComponent1.cache} + 'MB'"></td>
+                        <td th:text="${selectedComponent2.cache} + 'MB'"></td>
+                    </tr>
+                </th:block>
+
+                <!-- PSU -->
+                <th:block th:if="${componentType == 'PSU'}">
+                    <tr>
+                        <th scope="row">Type</th>
+                        <td th:text="${selectedComponent1.type}"></td>
+                        <td th:text="${selectedComponent2.type}"></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Power Supply</th>
+                        <td th:text="${selectedComponent1.powerSupply} + 'W'"></td>
+                        <td th:text="${selectedComponent2.powerSupply} + 'W'"></td>
+                    </tr>
+                </th:block>
+
+                <!-- Motherboard -->
+                <th:block th:if="${componentType == 'Motherboard'}">
+                    <tr>
+                        <th scope="row">Socket</th>
+                        <td th:text="${selectedComponent1.socket}"></td>
+                        <td th:text="${selectedComponent2.socket}"></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Form Factor</th>
+                        <td th:text="${selectedComponent1.formFactor}"></td>
+                        <td th:text="${selectedComponent2.formFactor}"></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Max Memory</th>
+                        <td th:text="${selectedComponent1.maxMemory} + 'GB'"></td>
+                        <td th:text="${selectedComponent2.maxMemory} + 'GB'"></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Memory Slots</th>
+                        <td th:text="${selectedComponent1.memorySlots}"></td>
+                        <td th:text="${selectedComponent2.memorySlots}"></td>
+                    </tr>
+                </th:block>
+
+
+                <!-- GPU -->
+                <th:block th:if="${componentType == 'GPU'}">
+                    <tr>
+                        <th scope="row">Chipset</th>
+                        <td th:text="${selectedComponent1.chipset}"></td>
+                        <td th:text="${selectedComponent2.chipset}"></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Memory</th>
+                        <td th:text="${selectedComponent1.memory} + 'GB'"></td>
+                        <td th:text="${selectedComponent2.memory} + 'GB'"></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Core Speed</th>
+                        <td th:text="${selectedComponent1.coreSpeed} + 'MHz'"></td>
+                        <td th:text="${selectedComponent2.coreSpeed} + 'MHz'"></td>
+                    </tr>
+                </th:block>
+
+                <!-- Cooler -->
+                <th:block th:if="${componentType == 'Cooler'}">
+                    <tr>
+                        <th scope="row">Fan RPM</th>
+                        <td th:text="${selectedComponent1.fanRPM} + ' RPM'"></td>
+                        <td th:text="${selectedComponent2.fanRPM} + ' RPM'"></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Min Noise Level</th>
+                        <td th:text="${selectedComponent1.minNoiseLevel} + ' dB'"></td>
+                        <td th:text="${selectedComponent2.minNoiseLevel} + ' dB'"></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Max Noise Level</th>
+                        <td th:text="${selectedComponent1.maxNoiseLevel} + ' dB'"></td>
+                        <td th:text="${selectedComponent2.maxNoiseLevel} + ' dB'"></td>
+                    </tr>
+                </th:block>
+
+                <!-- BuildCase -->
+                <th:block th:if="${componentType == 'BuildCase'}">
+                    <tr>
+                        <th scope="row">Type</th>
+                        <td th:text="${selectedComponent1.type}"></td>
+                        <td th:text="${selectedComponent2.type}"></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Panel</th>
+                        <td th:text="${selectedComponent1.panel}"></td>
+                        <td th:text="${selectedComponent2.panel}"></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Colour</th>
+                        <td th:text="${selectedComponent1.colour}"></td>
+                        <td th:text="${selectedComponent2.colour}"></td>
+                    </tr>
+                </th:block>
+                <th:block th:if="${componentType != 'PSU'}">
+                <tr>
+                    <th scope="row">Wattage Consumption</th>
+                    <td th:text="${selectedComponent1.wattageConsumption}+ 'W'"></td>
+                    <td th:text="${selectedComponent2.wattageConsumption}+ 'W'"></td>
+                </tr>
+            </th:block>
+                <tr>
+                    <th scope="row">Official Site</th>
+                    <td>
+                        <a th:href="${selectedComponent1.officialSiteLink}" target="_blank">Official Site</a>
+                    </td>
+                    <td>
+                        <a th:href="${selectedComponent2.officialSiteLink}" target="_blank">Official Site</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>
