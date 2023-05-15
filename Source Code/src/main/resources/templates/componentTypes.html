@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css"
+          integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+          <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+      <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+      <link rel="stylesheet" href="style.css">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+          integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+          crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <style>
+          @import url('https://fonts.googleapis.com/css2?family=Sora:wght@700&display=swap');
+    .navbar {
+              box-shadow: var(--box-shadow);
+              font-family: Sora, "sans-serif";
+              line-height: 1.7;
+              color: var(--body);
+          }
+  
+          .navbar.nav-link {
+              font-size: 14px;
+              font-weight: 700;
+          }
+                  .disabled-button {
+              pointer-events: none;
+              opacity: 0.6;
+          }
+      </style>
+    <title>Component Types</title>
+</head>
+<body>
+<!--NAVBAR-->     <nav class="navbar navbar-expand-lg py-3 sticky-top bg-body-tertiary bg-white">         <div class="container">             <a class="navbar-brand" href="#"><b> MY PC BUILDER</b></a>             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"                 data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"                 aria-label="Toggle navigation">                 <span class="navbar-toggler-icon"></span>             </button>             <div class="collapse navbar-collapse" id="navbarSupportedContent">                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">                     <li class="nav-item inactive">                         <a class="nav-link active" style="margin-right: 20px;" th:if="${userSession != null}">Hello                             <span th:text="${userSession.name}"></span>!</a>                     <li class="nav-item active">                     </li>                     <a class="nav-link" th:href="@{/}" href="#">Home</a>                     </li>                     <li class="nav-item active">                         <a class="nav-link" th:if="${isManager or isAdmin}" th:href="@{/manager}" href="#">Manage</a>                     </li>                     <li class="nav-item active">                         <a class="nav-link" th:href="@{/shop}" href="#">Shop</a>                     </li>                      <li class="nav-item active">                         <a class="nav-link" th:if="${userSession == null}" th:href="@{/login}" href="#">Login</a>                     </li>                     <li class="nav-item active">                         <a class="nav-link" th:if="${userSession != null}" th:href="@{/logout}" href="#">Logout</a>                     </li>                      <li class="nav-item active">                         <a class="nav-link" th:href="@{/build}" href="#">Build</a>                     </li>                     <li class="nav-item active">                         <span class="nav-link" th:text="${buildCount}">0</span>                     </li>                 </ul>             </div>         </div>     </nav>     <!--NAVBAR end-->
+<div class="container">
+    <div style="border-bottom: 10px; border-color: black;">
+    <a th:href="@{/manager}" style="margin: 20px 0; " class="btn"> <i class="fas fa-arrow-left"
+        style="margin-right: 5px;"></i> Manager Home</a>
+    </div>
+
+    <a th:href="@{/manager/componentTypes/add}" style="margin: 20px 0" class="btn btn-primary">Add componentType</a>
+    <table class="table">
+        <thead class="thead-light">
+        <tr>
+            <th scope="col">SN</th>
+            <th scope="col">Component Type</th>
+            <!-- <th scope ="col">Attribute 1</th> -->
+            <th scope="col">Delete</th>
+            <th scope="col">Update</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        <tr th:each="componentType, iStat : ${componentTypes}">
+            <th scope="row" th:text="${iStat.index + 1}">1</th>
+            <td th:text="${componentType.name}">Larry</td>
+            <!-- <td th:text="${componentType.attribute1}"> H</td> -->
+            
+
+            <td><a href="" th:href="@{/manager/componentTypes/delete/{id}(id=${componentType.id})}" class="btn btn-danger">Delete</a></td>
+            <td><a href="" th:href="@{/manager/componentTypes/update/{id}(id=${componentType.id})}" class="btn btn-warning">Update</a></td>
+
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+
+
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+</body>
+</html>

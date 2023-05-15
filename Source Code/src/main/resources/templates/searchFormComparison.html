@@ -1,0 +1,701 @@
+<div th:fragment="searchFormComparison">
+    <div class="container" style="border-bottom: 10px; border-color: black;">
+        <a th:href="@{/shop}" style="margin: 20px 0; " class="btn"> <i class="fas fa-arrow-left"
+                style="margin-right: 5px;"></i> Shop</a>
+    </div>
+    <!-- Display error message -->
+    <div th:if="${error}" class="alert alert-danger" role="alert">
+        <span th:text="${error}"></span>
+    </div>
+
+
+    <!-- !!!!!!!!!!!!!!!RAM!!!!!!!!!!!!!! -->
+
+    <div class="container" th:if="${type == 'RAM'}">
+        <div class="row">
+            <div class="col-sm-5 form-section">
+                <form th:action="@{/shop/compare/__${type}__}" th:object="${ramDTO}" method="POST">
+                    <div class="col-sm-5" style="max-width: 100%">
+                        <h3>Enter Details:</h3>
+                        <input type="hidden" name="id" th:field="*{id}">
+
+                        <div class="form-group">
+                            <label for="name">Name</label>
+                            <input type="text" class="form-control" th:field="*{name}" name="name" id="name"
+                                placeholder="Enter name">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="manufacturerName">Manufacturer</label>
+                            <input type="text" class="form-control" th:field="*{manufacturerName}"
+                                name="manufacturerName" id="manufacturerName" placeholder="Manufacturer Name">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="memory">Memory</label>
+                            <input type="number" class="form-control" th:field="*{memory}" name="memory" id="memory"
+                                placeholder="GB">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="speed">Speed</label>
+                            <input type="number" class="form-control" th:field="*{speed}" name="speed" id="speed"
+                                placeholder="MHz">
+                        </div>
+
+
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <a th:href="@{/shop/compare/__${type}__}" class="btn btn-secondary">Reset</a>
+
+                    </div>
+                </form>
+            </div>
+
+
+
+
+            <div class="col-sm-5">
+                <h3>Available Components:</h3>
+                <p style="font-style: italic; color: grey; font-weight: 400;">Select only 2</p>
+
+                <div th:if="${availableRAMs != null and not #lists.isEmpty(availableRAMs)}">
+                    <form action="/shop/compare/submit" method="post">
+                        <div class="card" style="margin-top: 20px" th:each="component : ${availableRAMs}">
+                            <div class="row no-gutters">
+                                <div class="col-sm-5 d-flex justify-content-center">
+                                    <img class="" height="150px" width="150px"
+                                        th:src="@{${'/componentImages/' + component.imageName}}"
+                                        th:alt="${component.name}">
+                                </div>
+                                <div class="col-sm-7 d-flex justify-content-center">
+                                    <div class="card-body">
+                                        <h5 class="card-title" th:text="${component.name}"></h5>
+
+
+                                        <input type="checkbox" th:name="${component.id}" th:value="${component.id}"
+                                            th:id="'component-' + ${component.id}" />
+                                        <label th:for="'component-' + ${component.id}">Select Component</label>
+
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="margin: 15px 15px 15px 0px;">Compare
+                            Selected Components</button>
+                    </form>
+                </div>
+                <div th:if="${availableRAMs == null or #lists.isEmpty(availableRAMs)}">
+                    <p>No components found.</p>
+                </div>
+
+
+            </div>
+
+        </div>
+    </div>
+
+
+
+
+
+
+    <!-- !!!!!!!!!!!!!!!CPU!!!!!!!!!!!!!! -->
+
+    <div class="container" th:if="${type == 'CPU'}">
+        <div class="row">
+            <div class="col-sm-5 form-section">
+                <form th:action="@{/shop/compare/__${type}__}" th:object="${cpuDTO}" method="POST">
+                    <div class="col-sm-5" style="max-width: 100%">
+                        <h3>Enter Details:</h3>
+                        <input type="hidden" name="id" th:field="*{id}">
+
+                        <div class="form-group">
+                            <label for="name">Name</label>
+                            <input type="text" class="form-control" th:field="*{name}" name="name" id="name"
+                                placeholder="Enter name">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="manufacturerName">Manufacturer</label>
+                            <input type="text" class="form-control" th:field="*{manufacturerName}"
+                                name="manufacturerName" id="manufacturerName" placeholder="Manufacturer Name">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="series">Series</label>
+                            <input type="text" class="form-control" th:field="*{series}" name="series" id="series"
+                                placeholder="Series">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="generation">Generation</label>
+                            <input type="number" class="form-control" th:field="*{generation}" name="generation"
+                                id="generation" placeholder="Generation">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="model">Model</label>
+                            <input type="text" class="form-control" th:field="*{model}" name="model" id="model"
+                                placeholder="Model">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="coreSpeed">Core Speed</label>
+                            <input type="number" class="form-control" th:field="*{coreSpeed}" name="coreSpeed"
+                                id="coreSpeed" placeholder="GHz">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="cores">Cores</label>
+                            <input type="number" class="form-control" th:field="*{cores}" name="cores" id="cores"
+                                placeholder="Number of Cores">
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <a th:href="@{/shop/compare/__${type}__}" class="btn btn-secondary">Reset</a>
+
+                    </div>
+                </form>
+            </div>
+
+            <div th:if="${availableCPUs != null and not #lists.isEmpty(availableCPUs)}">
+                <form action="/shop/compare/submit" method="post">
+                    <div class="card" style="margin-top: 20px" th:each="component : ${availableCPUs}">
+                        <div class="row no-gutters">
+                            <div class="col-sm-5 d-flex justify-content-center">
+                                <img class="" height="150px" width="150px"
+                                    th:src="@{${'/componentImages/' + component.imageName}}" th:alt="${component.name}">
+                            </div>
+                            <div class="col-sm-7 d-flex justify-content-center">
+                                <div class="card-body">
+                                    <h5 class="card-title" th:text="${component.name}"></h5>
+
+
+                                    <input type="checkbox" th:name="${component.id}" th:value="${component.id}"
+                                        th:id="'component-' + ${component.id}" />
+                                    <label th:for="'component-' + ${component.id}">Select Component</label>
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="margin: 15px 15px 15px 0px;">Compare
+                        Selected Components</button>
+                </form>
+            </div>
+            <div th:if="${availableCPUs == null or #lists.isEmpty(availableCPUs)}">
+                <p>No components found.</p>
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+
+
+
+
+    <!-- !!!!!!!!!!!!!!!Storage!!!!!!!!!!!!!! -->
+    <div class="container" th:if="${type == 'Storage'}">
+        <div class="row">
+            <div class="col-sm-5 form-section">
+                <form th:action="@{/shop/compare/__${type}__}" th:object="${storageDTO}" method="POST">
+                    <div class="col-sm-5" style="max-width: 100%">
+                        <h3>Enter Details:</h3>
+                        <input type="hidden" name="id" th:field="*{id}">
+    
+                        <div class="form-group">
+                            <label for="name">Name</label>
+                            <input type="text" class="form-control" th:field="*{name}" name="name" id="name"
+                                placeholder="Enter name">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="manufacturerName">Manufacturer</label>
+                            <input type="text" class="form-control" th:field="*{manufacturerName}"
+                                name="manufacturerName" id="manufacturerName" placeholder="Manufacturer Name">
+                        </div>
+    
+                        <div class="form-group">
+                            <label for="type">Type</label>
+                            <input type="text" class="form-control" th:field="*{type}" name="type" id="type"
+                                placeholder="Enter type">
+                        </div>
+    
+                        <div class="form-group">
+                            <label for="capacity">Capacity</label>
+                            <input type="number" class="form-control" th:field="*{capacity}" name="capacity" id="capacity"
+                                placeholder="GB">
+                        </div>
+    
+                        <div class="form-group">
+                            <label for="cache">Cache</label>
+                            <input type="number" class="form-control" th:field="*{cache}" name="cache" id="cache"
+                                placeholder="MB">
+                        </div>
+    
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <a th:href="@{/shop/compare/__${type}__}" class="btn btn-secondary">Reset</a>
+                    </div>
+                </form>
+            </div>
+    
+            <div class="col-sm-5">
+                <h3>Available Components:</h3>
+                <p style="font-style: italic; color: grey; font-weight: 400;">Select only 2</p>
+    
+                <div th:if="${availableStorages != null and not #lists.isEmpty(availableStorages)}">
+                    <form action="/shop/compare/submit" method="post">
+                        <div class="card" style="margin-top: 20px" th:each="component : ${availableStorages}">
+                            <div class="row no-gutters">
+                                <div class="col-sm-5 d-flex justify-content-center">
+                                    <img class="" height="150px" width="150px"
+                                        th:src="@{${'/componentImages/' + component.imageName}}"
+                                        th:alt="${component.name}">
+                                </div>
+                                <div class="col-sm-7 d-flex justify-content-center">
+                                    <div class="card-body">
+                                        <h5 class="card-title" th:text="${component.name}"></h5>
+    
+                                        <input type="checkbox" th:name="${component.id}" th:value="${component.id}"
+                                            th:id="'component-' + ${component.id}" />
+                                        <label th:for="'component-' + ${component.id}">Select Component</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="margin: 15px 15px 15px 0px;">Compare
+                            Selected Components</button>
+                    </form>
+                </div>
+                <div th:if="${availableStorages == null or #lists.isEmpty(availableStorages)}">
+                    <p>No components found.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
+
+
+
+
+
+    <!-- !!!!!!!!!!!!!!!PSU!!!!!!!!!!!!!! -->
+    <div class="container" th:if="${type == 'PSU'}">
+        <div class="row">
+            <div class="col-sm-5 form-section">
+                <form th:action="@{/shop/compare/__${type}__}" th:object="${psuDTO}" method="POST">
+                    <div class="col-sm-5" style="max-width: 100%">
+                        <h3>Enter Details:</h3>
+                        <input type="hidden" name="id" th:field="*{id}">
+    
+                        <div class="form-group">
+                            <label for="name">Name</label>
+                            <input type="text" class="form-control" th:field="*{name}" name="name" id="name"
+                                placeholder="Enter name">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="manufacturerName">Manufacturer</label>
+                            <input type="text" class="form-control" th:field="*{manufacturerName}"
+                                name="manufacturerName" id="manufacturerName" placeholder="Manufacturer Name">
+                        </div>
+    
+                        <div class="form-group">
+                            <label for="type">Type</label>
+                            <input type="text" class="form-control" th:field="*{type}" name="type" id="type"
+                                placeholder="Enter type">
+                        </div>
+    
+                        <div class="form-group">
+                            <label for="powerSupply">Power Supply</label>
+                            <input type="number" class="form-control" th:field="*{powerSupply}" name="powerSupply" id="powerSupply"
+                                placeholder="W">
+                        </div>
+    
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <a th:href="@{/shop/compare/__${type}__}" class="btn btn-secondary">Reset</a>
+                    </div>
+                </form>
+            </div>
+    
+            <div class="col-sm-5">
+                <h3>Available Components:</h3>
+                <p style="font-style: italic; color: grey; font-weight: 400;">Select only 2</p>
+    
+                <div th:if="${availablePSUs != null and not #lists.isEmpty(availablePSUs)}">
+                    <form action="/shop/compare/submit" method="post">
+                        <div class="card" style="margin-top: 20px" th:each="component : ${availablePSUs}">
+                            <div class="row no-gutters">
+                                <div class="col-sm-5 d-flex justify-content-center">
+                                    <img class="" height="150px" width="150px"
+                                        th:src="@{${'/componentImages/' + component.imageName}}"
+                                        th:alt="${component.name}">
+                                </div>
+                                <div class="col-sm-7 d-flex justify-content-center">
+                                    <div class="card-body">
+                                        <h5 class="card-title" th:text="${component.name}"></h5>
+    
+                                        <input type="checkbox" th:name="${component.id}" th:value="${component.id}"
+                                            th:id="'component-' + ${component.id}" />
+                                        <label th:for="'component-' + ${component.id}">Select Component</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="margin: 15px 15px 15px 0px;">Compare
+                            Selected Components</button>
+                    </form>
+                </div>
+                <div th:if="${availablePSUs == null or #lists.isEmpty(availablePSUs)}">
+                    <p>No components found.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
+
+
+
+
+    <!-- !!!!!!!!!!!!!!!Motherboard!!!!!!!!!!!!!! -->
+    <div class="container" th:if="${type == 'Motherboard'}">
+        <div class="row">
+            <div class="col-sm-5 form-section">
+                <form th:action="@{/shop/compare/__${type}__}" th:object="${motherboardDTO}" method="POST">
+                    <div class="col-sm-5" style="max-width: 100%">
+                        <h3>Enter Details:</h3>
+                        <input type="hidden" name="id" th:field="*{id}">
+    
+                        <div class="form-group">
+                            <label for="name">Name</label>
+                            <input type="text" class="form-control" th:field="*{name}" name="name" id="name"
+                                placeholder="Enter name">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="manufacturerName">Manufacturer</label>
+                            <input type="text" class="form-control" th:field="*{manufacturerName}"
+                                name="manufacturerName" id="manufacturerName" placeholder="Manufacturer Name">
+                        </div>
+    
+                        <div class="form-group">
+                            <label for="socket">Socket</label>
+                            <input type="text" class="form-control" th:field="*{socket}" name="socket" id="socket"
+                                placeholder="Enter socket">
+                        </div>
+    
+                        <div class="form-group">
+                            <label for="formFactor">Form Factor</label>
+                            <input type="text" class="form-control" th:field="*{formFactor}" name="formFactor" id="formFactor"
+                                placeholder="Enter form factor">
+                        </div>
+    
+                        <div class="form-group">
+                            <label for="maxMemory">Max Memory</label>
+                            <input type="number" class="form-control" th:field="*{maxMemory}" name="maxMemory" id="maxMemory"
+                                placeholder="GB">
+                        </div>
+    
+                        <div class="form-group">
+                            <label for="memorySlots">Memory Slots</label>
+                            <input type="number" class="form-control" th:field="*{memorySlots}" name="memorySlots" id="memorySlots"
+                                placeholder="Enter memory slots">
+                        </div>
+    
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <a th:href="@{/shop/compare/__${type}__}" class="btn btn-secondary">Reset</a>
+                    </div>
+                </form>
+            </div>
+    
+            <div class="col-sm-5">
+                <h3>Available Components:</h3>
+                <p style="font-style: italic; color: grey; font-weight: 400;">Select only 2</p>
+    
+                <div th:if="${availableMotherboards != null and not #lists.isEmpty(availableMotherboards)}">
+                    <form action="/shop/compare/submit" method="post">
+                        <div class="card" style="margin-top: 20px" th:each="component : ${availableMotherboards}">
+                            <div class="row no-gutters">
+                                <div class="col-sm-5 d-flex justify-content-center">
+                                    <img class="" height="150px" width="150px"
+                                        th:src="@{${'/componentImages/' + component.imageName}}"
+                                        th:alt="${component.name}">
+                                </div>
+                                <div class="col-sm-7 d-flex justify-content-center">
+                                    <div class="card-body">
+                                        <h5 class="card-title" th:text="${component.name}"></h5>
+    
+                                        <input type="checkbox" th:name="${component.id}" th:value="${component.id}"
+                                            th:id="'component-' + ${component.id}" />
+                                        <label th:for="'component-' + ${component.id}">Select Component</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="margin: 15px 15px 15px 0px;">Compare Selected Components</button>
+                    </form>
+                    </div>
+                    <div th:if="${availableMotherboards == null or #lists.isEmpty(availableMotherboards)}">
+                    <p>No components found.</p>
+                    </div>
+                    </div>
+                    </div>
+                    
+                    </div>
+    
+
+
+
+    <!-- !!!!!!!!!!!!!!!GPU!!!!!!!!!!!!!! -->
+    <div class="container" th:if="${type == 'GPU'}">
+        <div class="row">
+            <div class="col-sm-5 form-section">
+                <form th:action="@{/shop/compare/__${type}__}" th:object="${gpuDTO}" method="POST">
+                    
+                    
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input type="text" class="form-control" th:field="*{name}" name="name" id="name"
+                            placeholder="Enter name">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="manufacturerName">Manufacturer</label>
+                        <input type="text" class="form-control" th:field="*{manufacturerName}"
+                            name="manufacturerName" id="manufacturerName" placeholder="Manufacturer Name">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="chipset">Chipset</label>
+                        <input type="text" class="form-control" th:field="*{chipset}" name="chipset" id="chipset"
+                               placeholder="Enter Chipset">
+                    </div>
+    
+                    <div class="form-group">
+                        <label for="memory">Memory</label>
+                        <input type="number" class="form-control" th:field="*{memory}" name="memory" id="memory"
+                               placeholder="GB">
+                    </div>
+    
+                    <div class="form-group">
+                        <label for="coreSpeed">Core Speed</label>
+                        <input type="number" class="form-control" th:field="*{coreSpeed}" name="coreSpeed" id="coreSpeed"
+                               placeholder="MHz">
+                    </div>
+    
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <a th:href="@{/shop/compare/__${type}__}" class="btn btn-secondary">Reset</a>
+                </form>
+            </div>
+    
+            <div class="col-sm-5">
+                <h3>Available Components:</h3>
+                <p style="font-style: italic; color: grey; font-weight: 400;">Select only 2</p>
+    
+                <div th:if="${availableGPUs != null and not #lists.isEmpty(availableGPUs)}">
+                    <form action="/shop/compare/submit" method="post">
+                        <div class="card" style="margin-top: 20px" th:each="component : ${availableGPUs}">
+                            <div class="row no-gutters">
+                                <div class="col-sm-5 d-flex justify-content-center">
+                                    <img class="" height="150px" width="150px"
+                                         th:src="@{${'/componentImages/' + component.imageName}}"
+                                         th:alt="${component.name}">
+                                </div>
+                                <div class="col-sm-7 d-flex justify-content-center">
+                                    <div class="card-body">
+                                        <h5 class="card-title" th:text="${component.name}"></h5>
+    
+                                        <input type="checkbox" th:name="${component.id}" th:value="${component.id}"
+                                               th:id="'component-' + ${component.id}" />
+                                        <label th:for="'component-' + ${component.id}">Select Component</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="margin: 15px 15px 15px 0px;">Compare
+                            Selected Components</button>
+                    </form>
+                </div>
+                <div th:if="${availableGPUs == null or #lists.isEmpty(availableGPUs)}">
+                    <p>No components found.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
+
+
+
+    <!-- !!!!!!!!!!!!!!!Cooler!!!!!!!!!!!!!! -->
+    <div class="container" th:if="${type == 'Cooler'}">
+        <div class="row">
+            <div class="col-sm-5 form-section">
+                <form th:action="@{/shop/compare/__${type}__}" th:object="${coolerDTO}" method="POST">
+                   
+                    
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input type="text" class="form-control" th:field="*{name}" name="name" id="name"
+                            placeholder="Enter name">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="manufacturerName">Manufacturer</label>
+                        <input type="text" class="form-control" th:field="*{manufacturerName}"
+                            name="manufacturerName" id="manufacturerName" placeholder="Manufacturer Name">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="fanRPM">Fan RPM</label>
+                        <input type="number" class="form-control" th:field="*{fanRPM}" name="fanRPM" id="fanRPM"
+                               placeholder="Enter Fan RPM">
+                    </div>
+    
+                    <div class="form-group">
+                        <label for="minNoiseLevel">Min Noise Level</label>
+                        <input type="number" class="form-control" th:field="*{minNoiseLevel}" name="minNoiseLevel" id="minNoiseLevel"
+                               placeholder="dB">
+                    </div>
+    
+                    <div class="form-group">
+                        <label for="maxNoiseLevel">Max Noise Level</label>
+                        <input type="number" class="form-control" th:field="*{maxNoiseLevel}" name="maxNoiseLevel" id="maxNoiseLevel"
+                               placeholder="dB">
+                    </div>
+    
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <a th:href="@{/shop/compare/__${type}__}" class="btn btn-secondary">Reset</a>
+                </form>
+            </div>
+    
+            <div class="col-sm-5">
+                <h3>Available Components:</h3>
+                <p style="font-style: italic; color: grey; font-weight: 400;">Select only 2</p>
+    
+                <div th:if="${availableCoolers != null and not #lists.isEmpty(availableCoolers)}">
+                    <form action="/shop/compare/submit" method="post">
+                        <div class="card" style="margin-top: 20px" th:each="component : ${availableCoolers}">
+                            <div class="row no-gutters">
+                                <div class="col-sm-5 d-flex justify-content-center">
+                                    <img class="" height="150px" width="150px"
+                                         th:src="@{${'/componentImages/' + component.imageName}}"
+                                         th:alt="${component.name}">
+                                </div>
+                                <div class="col-sm-7 d-flex justify-content-center">
+                                    <div class="card-body">
+                                        <h5 class="card-title" th:text="${component.name}"></h5>
+    
+                                        <input type="checkbox" th:name="${component.id}" th:value="${component.id}"
+                                               th:id="'component-' + ${component.id}" />
+                                        <label th:for="'component-' + ${component.id}">Select Component</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="margin: 15px 15px 15px 0px;">Compare
+                            Selected Components</button>
+                    </form>
+                </div>
+                <div th:if="${availableCoolers == null or #lists.isEmpty(availableCoolers)}">
+                    <p>No components found.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    
+    <!-- !!!!!!!!!!!!!!!Build Case!!!!!!!!!!!!!! -->
+    <div class="container" th:if="${type == 'BuildCase'}">
+        <div class="row">
+            <div class="col-sm-5 form-section">
+                <form th:action="@{/shop/compare/__${type}__}" th:object="${buildCaseDTO}" method="POST">
+                  
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input type="text" class="form-control" th:field="*{name}" name="name" id="name"
+                            placeholder="Enter name">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="manufacturerName">Manufacturer</label>
+                        <input type="text" class="form-control" th:field="*{manufacturerName}"
+                            name="manufacturerName" id="manufacturerName" placeholder="Manufacturer Name">
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="type">Type</label>
+                        <input type="text" class="form-control" th:field="*{type}" name="type" id="type"
+                               placeholder="Enter Type">
+                    </div>
+    
+                    <div class="form-group">
+                        <label for="panel">Panel</label>
+                        <input type="text" class="form-control" th:field="*{panel}" name="panel" id="panel"
+                               placeholder="Enter Panel">
+                    </div>
+    
+                    <div class="form-group">
+                        <label for="colour">Colour</label>
+                        <input type="text" class="form-control" th:field="*{colour}" name="colour" id="colour"
+                               placeholder="Enter Colour">
+                    </div>
+    
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <a th:href="@{/shop/compare/__${type}__}" class="btn btn-secondary">Reset</a>
+                </form>
+            </div>
+    
+            <div class="col-sm-5">
+                <h3>Available Components:</h3>
+                <p style="font-style: italic; color: grey; font-weight: 400;">Select only 2</p>
+    
+                <div th:if="${availableBuildCases != null and not #lists.isEmpty(availableBuildCases)}">
+                    <form action="/shop/compare/submit" method="post">
+                        <div class="card" style="margin-top: 20px" th:each="component : ${availableBuildCases}">
+                            <div class="row no-gutters">
+                                <div class="col-sm-5 d-flex justify-content-center">
+                                    <img class="" height="150px" width="150px"
+                                         th:src="@{${'/componentImages/' + component.imageName}}"
+                                         th:alt="${component.name}">
+                                </div>
+                                <div class="col-sm-7 d-flex justify-content-center">
+                                    <div class="card-body">
+                                        <h5 class="card-title" th:text="${component.name}"></h5>
+    
+                                        <input type="checkbox" th:name="${component.id}" th:value="${component.id}"
+                                               th:id="'component-' + ${component.id}" />
+                                        <label th:for="'component-' + ${component.id}">Select Component</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="margin: 15px 15px 15px 0px;">Compare
+                            Selected Components</button>
+                    </form>
+                </div>
+                <div th:if="${availableBuildCases == null or #lists.isEmpty(availableBuildCases)}">
+                    <p>No components found.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
+
+
+
+
+
+</div>

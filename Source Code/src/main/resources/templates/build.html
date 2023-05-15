@@ -1,0 +1,889 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+    xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+<link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Sora:wght@700&display=swap');
+.navbar {
+        box-shadow: var(--box-shadow);
+        font-family: Sora, "sans-serif";
+        line-height: 1.7;
+        color: var(--body);
+    }
+
+    .navbar.nav-link {
+        font-size: 14px;
+        font-weight: 700;
+    }
+            .disabled-button {
+        pointer-events: none;
+        opacity: 0.6;
+    }
+</style>
+
+    <title>PC Build</title>
+</head>
+
+<body>
+
+
+     <!--NAVBAR-->
+    <nav class="navbar navbar-expand-lg py-3 sticky-top bg-body-tertiary bg-white">
+        <div class="container">
+            <a class="navbar-brand" href="#"><b> MY PC BUILDER</b></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                    <li class="nav-item inactive">
+                        <a class="nav-link active" style="margin-right: 20px;" th:if="${userSession != null}">Hello
+                            <span th:text="${userSession.name}"></span>!</a>
+                    <li class="nav-item active">
+                    </li>
+                    <a class="nav-link" th:href="@{/}" href="#">Home</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" th:if="${isManager or isAdmin}" th:href="@{/manager}" href="#">Manage</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" th:href="@{/shop}" href="#">Shop</a>
+                    </li>
+
+                    <li class="nav-item active">
+                        <a class="nav-link" th:if="${userSession == null}" th:href="@{/login}" href="#">Login</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" th:if="${userSession != null}" th:href="@{/logout}" href="#">Logout</a>
+                    </li>
+
+                    <li class="nav-item active">
+                        <a class="nav-link" th:href="@{/build}" href="#">Build</a>
+                    </li>
+                    <li class="nav-item active">
+                        <span class="nav-link" th:text="${buildCount}">0</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!--NAVBAR end-->
+    <main>
+        <div class="container">
+
+            <!--Section: Block Content-->
+            <section class="mt-5 mb-4">
+
+                <!--Grid row-->
+                <div class="row">
+
+                    <!--Grid column-->
+                    <div class="col-lg-8">
+
+                        <!-- Card -->
+                        <div class="card wish-list mb-4">
+
+                            <!-- CPU -->
+                            <div class="card-body">
+
+                                <h5 class="mb-4">CPU</h5>
+
+                                <div class="row mb-4" th:each="item, iStat : ${buildCPU}">
+                                    <div class="col-md-5 col-lg-3 col-xl-3">
+                                        <div class="mb-1 mb-md-0">
+                                            <img class="img-fluid w-100"
+                                                th:src="@{${'/componentImages/' + item.imageName}}"
+                                                src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Vertical/12a.jpg"
+                                                alt="Sample">
+
+                                        </div>
+                                    </div>
+                                    <div class="col-md-7 col-lg-9 col-xl-9">
+                                        <div>
+                                            <div class="d-flex justify-content-between">
+                                                <div>
+                                                    <h5 th:text="${item.name}">Blue denim shirt</h5>
+
+                                                    <!-- Button to toggle the collapsible content -->
+                                                    <button class="btn btn-sm text-primary" type="button"
+                                                        data-toggle="collapse"
+                                                        th:attr="data-target='#collapseDetails_CPU_' + ${iStat.index}"
+                                                        aria-expanded="false" aria-controls="collapseDetails"
+                                                        style="background: none; border: none; padding: 0;">
+                                                        Show Details
+                                                    </button>
+
+                                                    <!-- Collapsible content containing the price and wattage details -->
+                                                    <div class="collapse mt-2"
+                                                        th:attr="id='collapseDetails_CPU_' + ${iStat.index}">
+
+                                                        <div class="row small">
+                                                            <div class="col-md-6">
+                                                                <p class="mb-1">
+                                                                    Price: <span th:text="${item.price}"></span>
+                                                                </p>
+                                                                <p class="mb-1">
+                                                                    Wattage: <span
+                                                                        th:text="${item.wattageConsumption}"></span>
+                                                                </p>
+                                                                <p class="mb-1">
+                                                                    Series: <span th:text="${item.series}"></span>
+                                                                </p>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <p class="mb-1">
+                                                                    Generation: <span
+                                                                        th:text="${item.generation}"></span>
+                                                                </p>
+                                                                <p class="mb-1">
+                                                                    Cores: <span th:text="${item.cores}"></span>
+                                                                </p>
+                                                                <p class="mb-1">
+                                                                    Core Speed: <span
+                                                                        th:text="${item.coreSpeed}"></span>
+                                                                </p>
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+
+
+                                            </div>
+                                            <div class="mt-5 d-flex justify-content-between align-items-center">
+                                                <div>
+                                                    <a href="#!"
+                                                        th:href="@{/build/removeItem/{index}/{type}(index=${iStat.index}, type=${item.componentType.id})}"
+                                                        type="button"
+                                                        class="card-link-secondary small text-upperbuildCase mr-3"><i
+                                                            class="fas fa-trash-alt mr-1"></i> Remove item </a>
+
+                                                </div>
+                                                <p class="mb-0"><span><strong>$<span
+                                                                th:text="${item.price}"></span></strong></span></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+
+
+                            </div>
+
+                            <hr class="mb-4">
+
+                            <!-- RAM -->
+                            <div class="card-body">
+
+                                <h5 class="mb-4">RAM</h5>
+
+                                <div class="row mb-4" th:each="item, iStat : ${buildRAM}">
+                                    <div class="col-md-5 col-lg-3 col-xl-3">
+                                        <div class="mb-1 mb-md-0">
+                                            <img class="img-fluid w-100"
+                                                th:src="@{${'/componentImages/' + item.imageName}}"
+                                                src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Vertical/12a.jpg"
+                                                alt="Sample">
+
+                                        </div>
+                                    </div>
+                                    <div class="col-md-7 col-lg-9 col-xl-9">
+                                        <div>
+                                            <div class="d-flex justify-content-between">
+                                                <div>
+                                                    <h5 th:text="${item.name}">Blue denim shirt</h5>
+
+                                                    <!-- Button to toggle the collapsible content -->
+                                                    <button class="btn btn-sm text-primary" type="button"
+                                                        data-toggle="collapse"
+                                                        th:attr="data-target='#collapseDetails_RAM_' + ${iStat.index}"
+                                                        aria-expanded="false" aria-controls="collapseDetails"
+                                                        style="background: none; border: none; padding: 0;">
+                                                        Show Details
+                                                    </button>
+
+                                                    <!-- Collapsible content containing the price and wattage details -->
+                                                    <div class="collapse mt-2"
+                                                        th:attr="id='collapseDetails_RAM_' + ${iStat.index}">
+
+                                                        <div class="row small">
+                                                            <div class="col-md-6">
+                                                                <p class="mb-1">
+                                                                    Price: <span th:text="${item.price}"></span>
+                                                                </p>
+                                                                <p class="mb-1">
+                                                                    Wattage: <span
+                                                                        th:text="${item.wattageConsumption}"></span>
+                                                                </p>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <p class="mb-1">
+                                                                    Speed: <span th:text="${item.speed}"></span>
+                                                                </p>
+                                                                <p class="mb-1">
+                                                                    Memory: <span th:text="${item.memory}"></span>
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+
+                                            </div>
+                                            <div class="mt-5 d-flex justify-content-between align-items-center">
+                                                <div>
+                                                    <a href="#!"
+                                                        th:href="@{/build/removeItem/{index}/{type}(index=${iStat.index}, type=${item.componentType.id})}"
+                                                        type="button"
+                                                        class="card-link-secondary small text-upperbuildCase mr-3"><i
+                                                            class="fas fa-trash-alt mr-1"></i> Remove item </a>
+
+                                                </div>
+                                                <p class="mb-0"><span><strong>$<span
+                                                                th:text="${item.price}"></span></strong></span></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr class="mb-4">
+
+                            <!-- PSU -->
+                            <div class="card-body">
+
+                                <h5 class="mb-4">PSU</h5>
+                                <div class="row mb-4" th:each="item, iStat : ${buildPSU}">
+                                    <div class="col-md-5 col-lg-3 col-xl-3">
+                                        <div class="mb-1 mb-md-0">
+                                            <img class="img-fluid w-100"
+                                                th:src="@{${'/componentImages/' + item.imageName}}"
+                                                src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Vertical/12a.jpg"
+                                                alt="Sample">
+
+                                        </div>
+                                    </div>
+                                    <div class="col-md-7 col-lg-9 col-xl-9">
+                                        <div>
+                                            <div class="d-flex justify-content-between">
+                                                <div>
+                                                    <h5 th:text="${item.name}">Blue denim shirt</h5>
+
+                                                    <!-- Button to toggle the collapsible content -->
+                                                    <button class="btn btn-sm text-primary" type="button"
+                                                        data-toggle="collapse"
+                                                        th:attr="data-target='#collapseDetails_PSU_' + ${iStat.index}"
+                                                        aria-expanded="false" aria-controls="collapseDetails"
+                                                        style="background: none; border: none; padding: 0;">
+                                                        Show Details
+                                                    </button>
+
+                                                    <!-- Collapsible content containing the price and wattage details -->
+                                                    <div class="collapse mt-2"
+                                                        th:attr="id='collapseDetails_PSU_' + ${iStat.index}">
+
+                                                        <div class="row small">
+                                                            <div class="col-md-6">
+                                                                <p class="mb-1">
+                                                                    Price: <span th:text="${item.price}"></span>
+                                                                </p>
+                                                                <p class="mb-1">
+                                                                    Supply: <span th:text="${item.powerSupply}"></span>
+                                                                </p>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <p class="mb-1">
+                                                                    Type: <span th:text="${item.type}"></span>
+                                                                </p>
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+
+                                            </div>
+                                            <div class="mt-5 d-flex justify-content-between align-items-center">
+                                                <div>
+                                                    <a href="#!"
+                                                        th:href="@{/build/removeItem/{index}/{type}(index=${iStat.index}, type=${item.componentType.id})}"
+                                                        type="button"
+                                                        class="card-link-secondary small text-upperbuildCase mr-3"><i
+                                                            class="fas fa-trash-alt mr-1"></i> Remove item </a>
+
+                                                </div>
+                                                <p class="mb-0"><span><strong>$<span
+                                                                th:text="${item.price}"></span></strong></span></p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+
+
+
+
+                                </div>
+
+                            </div>
+                            <hr class="mb-4">
+
+                            <!-- Motherboard -->
+                            <div class="card-body">
+
+                                <h5 class="mb-4">Motherboard</h5>
+                                <div class="row mb-4" th:each="item, iStat : ${buildMotherboard}">
+                                    <div class="col-md-5 col-lg-3 col-xl-3">
+                                        <div class="mb-1 mb-md-0">
+                                            <img class="img-fluid w-100"
+                                                th:src="@{${'/componentImages/' + item.imageName}}"
+                                                src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Vertical/12a.jpg"
+                                                alt="Sample">
+
+                                        </div>
+                                    </div>
+                                    <div class="col-md-7 col-lg-9 col-xl-9">
+                                        <div>
+                                            <div class="d-flex justify-content-between">
+                                                <div>
+                                                    <h5 th:text="${item.name}">Blue denim shirt</h5>
+
+                                                    <!-- Button to toggle the collapsible content -->
+                                                    <button class="btn btn-sm text-primary" type="button"
+                                                        data-toggle="collapse"
+                                                        th:attr="data-target='#collapseDetails_Motherboard_' + ${iStat.index}"
+                                                        aria-expanded="false" aria-controls="collapseDetails"
+                                                        style="background: none; border: none; padding: 0;">
+                                                        Show Details
+                                                    </button>
+
+                                                    <!-- Collapsible content containing the price and wattage details -->
+                                                    <div class="collapse mt-2"
+                                                        th:attr="id='collapseDetails_Motherboard_' + ${iStat.index}">
+
+                                                        <div class="row small">
+                                                            <div class="col-md-6">
+                                                                <p class="mb-1">
+                                                                    Price: <span th:text="${item.price}"></span>
+                                                                </p>
+                                                                <p class="mb-1">
+                                                                    Socket: <span th:text="${item.socket}"></span>
+                                                                </p>
+                                                                <p class="mb-1">
+                                                                    Form Factor: <span
+                                                                        th:text="${item.formFactor}"></span>
+                                                                </p>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <p class="mb-1">
+                                                                    Max Memory: <span
+                                                                        th:text="${item.maxMemory}"></span>
+                                                                </p>
+                                                                <p class="mb-1">
+                                                                    Memory Slots: <span
+                                                                        th:text="${item.memorySlots}"></span>
+                                                                </p>
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+
+                                            </div>
+                                            <div class="mt-5 d-flex justify-content-between align-items-center">
+                                                <div>
+                                                    <a href="#!"
+                                                        th:href="@{/build/removeItem/{index}/{type}(index=${iStat.index}, type=${item.componentType.id})}"
+                                                        type="button"
+                                                        class="card-link-secondary small text-upperbuildCase mr-3"><i
+                                                            class="fas fa-trash-alt mr-1"></i> Remove item </a>
+
+                                                </div>
+                                                <p class="mb-0"><span><strong>$<span
+                                                                th:text="${item.price}"></span></strong></span></p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+
+
+
+
+                                </div>
+
+                            </div>
+                            <hr class="mb-4">
+
+                            <!-- Storage -->
+                            <div class="card-body">
+                                <h5 class="mb-4">Storage</h5>
+                                <div class="row mb-4" th:each="item, iStat : ${buildStorage}">
+                                    <div class="col-md-5 col-lg-3 col-xl-3">
+                                        <div class="mb-1 mb-md-0">
+                                            <img class="img-fluid w-100"
+                                                th:src="@{${'/componentImages/' + item.imageName}}"
+                                                src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Vertical/12a.jpg"
+                                                alt="Sample">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-7 col-lg-9 col-xl-9">
+                                        <div>
+                                            <div class="d-flex justify-content-between">
+                                                <div>
+                                                    <h5 th:text="${item.name}">Blue denim shirt</h5>
+
+                                                    <!-- Button to toggle the collapsible content -->
+                                                    <button class="btn btn-sm text-primary" type="button"
+                                                        data-toggle="collapse"
+                                                        th:attr="data-target='#collapseDetails_Storage_' + ${iStat.index}"
+                                                        aria-expanded="false" aria-controls="collapseDetails"
+                                                        style="background: none; border: none; padding: 0;">
+                                                        Show Details
+                                                    </button>
+
+                                                    <!-- Collapsible content containing the price and wattage details -->
+                                                    <div class="collapse mt-2"
+                                                        th:attr="id='collapseDetails_Storage_' + ${iStat.index}">
+
+                                                        <div class="row small">
+                                                            <div class="col-md-6">
+                                                                <p class="mb-1">
+                                                                    Price: <span th:text="${item.price}"></span>
+                                                                </p>
+                                                                <p class="mb-1">
+                                                                    Capacity: <span th:text="${item.capacity}"></span>
+                                                                </p>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <p class="mb-1">
+                                                                    Cache: <span th:text="${item.cache}"></span>
+                                                                </p>
+                                                                <p class="mb-1">
+                                                                    Type: <span th:text="${item.type}"></span>
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="mt-5 d-flex justify-content-between align-items-center">
+                                                <div>
+                                                    <a href="#!"
+                                                        th:href="@{/build/removeItem/{index}/{type}(index=${iStat.index}, type=${item.componentType.id})}"
+                                                        type="button"
+                                                        class="card-link-secondary small text-upperbuildCase mr-3"><i
+                                                            class="fas fa-trash-alt mr-1"></i> Remove item </a>
+                                                </div>
+                                                <p class="mb-0"><span><strong>$<span
+                                                                th:text="${item.price}"></span></strong></span></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr class="mb-4">
+
+                            <!-- GPU -->
+                            <div class="card-body">
+                                <h5 class="mb-4">GPU</h5>
+                                <div class="row mb-4" th:each="item, iStat : ${buildGPU}">
+                                    <div class="col-md-5 col-lg-3 col-xl-3">
+                                        <div class="mb-1 mb-md-0">
+                                            <img class="img-fluid w-100"
+                                                th:src="@{${'/componentImages/' + item.imageName}}"
+                                                src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Vertical/12a.jpg"
+                                                alt="Sample">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-7 col-lg-9 col-xl-9">
+                                        <div>
+                                            <div class="d-flex justify-content-between">
+                                                <div>
+                                                    <h5 th:text="${item.name}">Blue denim shirt</h5>
+
+                                                    <!-- Button to toggle the collapsible content -->
+                                                    <button class="btn btn-sm text-primary" type="button"
+                                                        data-toggle="collapse"
+                                                        th:attr="data-target='#collapseDetails_GPU_' + ${iStat.index}"
+                                                        aria-expanded="false" aria-controls="collapseDetails"
+                                                        style="background: none; border: none; padding: 0;">
+                                                        Show Details
+                                                    </button>
+
+                                                    <!-- Collapsible content containing the price and wattage details -->
+                                                    <div class="collapse mt-2"
+                                                        th:attr="id='collapseDetails_GPU_' + ${iStat.index}">
+
+                                                        <div class="row small">
+                                                            <div class="col-md-6">
+                                                                <p class="mb-1">
+                                                                    Price: <span th:text="${item.price}"></span>
+                                                                </p>
+                                                                <p class="mb-1">
+                                                                    Wattage Consumption: <span
+                                                                        th:text="${item.wattageConsumption}"></span>
+                                                                </p>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <p class="mb-1">
+                                                                    Memory: <span th:text="${item.memory}"></span>
+                                                                </p>
+                                                                <p class="mb-1">
+                                                                    Core Speed: <span
+                                                                        th:text="${item.coreSpeed}"></span>
+                                                                </p>
+                                                                <p class="mb-1">
+                                                                    Chipset: <span th:text="${item.chipset}"></span>
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+
+                                            </div>
+                                            <div class="mt-5 d-flex justify-content-between align-items-center">
+                                                <div>
+                                                    <a href="#!"
+                                                        th:href="@{/build/removeItem/{index}/{type}(index=${iStat.index}, type=${item.componentType.id})}"
+                                                        type="button"
+                                                        class="card-link-secondary small text-upperbuildCase mr-3"><i
+                                                            class="fas fa-trash-alt mr-1"></i> Remove item </a>
+
+                                                </div>
+                                                <p class="mb-0"><span><strong>$<span
+                                                                th:text="${item.price}"></span></strong></span></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr class="mb-4">
+
+                            <!-- BuildCase -->
+                            <div class="card-body">
+                                <h5 class="mb-4">BuildCase</h5>
+                                <div class="row mb-4" th:each="item, iStat : ${buildBuildCase}">
+                                    <div class="col-md-5 col-lg-3 col-xl-3">
+                                        <div class="mb-1 mb-md-0">
+                                            <img class="img-fluid w-100"
+                                                th:src="@{${'/componentImages/' + item.imageName}}"
+                                                src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Vertical/12a.jpg"
+                                                alt="Sample">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-7 col-lg-9 col-xl-9">
+                                        <div>
+                                            <div class="d-flex justify-content-between">
+                                                <div>
+                                                    <h5 th:text="${item.name}">Blue denim shirt</h5>
+
+                                                    <!-- Button to toggle the collapsible content -->
+                                                    <button class="btn btn-sm text-primary" type="button"
+                                                        data-toggle="collapse"
+                                                        th:attr="data-target='#collapseDetails_BuildCase_' + ${iStat.index}"
+                                                        aria-expanded="false" aria-controls="collapseDetails"
+                                                        style="background: none; border: none; padding: 0;">
+                                                        Show Details
+                                                    </button>
+
+                                                    <!-- Collapsible content containing the price and wattage details -->
+                                                    <div class="collapse mt-2"
+                                                        th:attr="id='collapseDetails_BuildCase_' + ${iStat.index}">
+
+                                                        <div class="row small">
+                                                            <div class="col-md-6">
+                                                                <p class="mb-1">
+                                                                    Price: <span th:text="${item.price}"></span>
+                                                                </p>
+                                                                <p class="mb-1">
+                                                                    Wattage Consumption: <span
+                                                                        th:text="${item.wattageConsumption}"></span>
+                                                                </p>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <p class="mb-1">
+                                                                    Type: <span th:text="${item.type}"></span>
+                                                                </p>
+                                                                <p class="mb-1">
+                                                                    Panel: <span th:text="${item.panel}"></span>
+                                                                </p>
+                                                                <p class="mb-1">
+                                                                    Colour: <span th:text="${item.colour}"></span>
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+
+                                            </div>
+                                            <div class="mt-5 d-flex justify-content-between align-items-center">
+                                                <div>
+                                                    <a href="#!"
+                                                        th:href="@{/build/removeItem/{index}/{type}(index=${iStat.index}, type=${item.componentType.id})}"
+                                                        type="button"
+                                                        class="card-link-secondary small text-upperbuildCase mr-3"><i
+                                                            class="fas fa-trash-alt mr-1"></i> Remove item </a>
+
+                                                </div>
+                                                <p class="mb-0"><span><strong>$<span
+                                                                th:text="${item.price}"></span></strong></span></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr class="mb-4">
+
+                            <!-- Cooler -->
+                            <div class="card-body">
+                                <h5 class="mb-4">Cooler</h5>
+                                <div class="row mb-4" th:each="item, iStat : ${buildCooler}">
+                                    <div class="col-md-5 col-lg-3 col-xl-3">
+                                        <div class="mb-1 mb-md-0">
+                                            <img class="img-fluid w-100"
+                                                th:src="@{${'/componentImages/' + item.imageName}}"
+                                                src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Vertical/12a.jpg"
+                                                alt="Sample">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-7 col-lg-9 col-xl-9">
+                                        <div>
+                                            <div class="d-flex justify-content-between">
+                                                <div>
+                                                    <h5 th:text="${item.name}">Blue denim shirt</h5>
+
+                                                    <!-- Button to toggle the collapsible content -->
+                                                    <button class="btn btn-sm text-primary" type="button"
+                                                        data-toggle="collapse"
+                                                        th:attr="data-target='#collapseDetails_Cooler_' + ${iStat.index}"
+                                                        aria-expanded="false" aria-controls="collapseDetails"
+                                                        style="background: none; border: none; padding: 0;">
+                                                        Show Details
+                                                    </button>
+
+                                                    <!-- Collapsible content containing the price and wattage details -->
+                                                    <div class="collapse mt-2"
+                                                        th:attr="id='collapseDetails_Cooler_' + ${iStat.index}">
+
+                                                        <div class="row small">
+                                                            <div class="col-md-6">
+                                                                <p class="mb-1">
+                                                                    Price: <span th:text="${item.price}"></span>
+                                                                </p>
+                                                                <p class="mb-1">
+                                                                    Wattage Consumption: <span
+                                                                        th:text="${item.wattageConsumption}"></span>
+                                                                </p>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <p class="mb-1">
+                                                                    Fan RPM: <span th:text="${item.fanRPM}"></span>
+                                                                </p>
+                                                                <p class="mb-1">
+                                                                    Min Noise Level: <span
+                                                                        th:text="${item.minNoiseLevel}"></span>
+                                                                </p>
+                                                                <p class="mb-1">
+                                                                    Max Noise Level: <span
+                                                                        th:text="${item.maxNoiseLevel}"></span>
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+
+                                            </div>
+                                            <div class="mt-5 d-flex justify-content-between align-items-center">
+                                                <div>
+                                                    <a href="#!"
+                                                        th:href="@{/build/removeItem/{index}/{type}(index=${iStat.index}, type=${item.componentType.id})}"
+                                                        type="button"
+                                                        class="card-link-secondary small text-upperbuildCase mr-3"><i
+                                                            class="fas fa-trash-alt mr-1"></i> Remove item </a>
+
+                                                </div>
+                                                <p class="mb-0"><span><strong>$<span
+                                                                th:text="${item.price}"></span></strong></span></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr class="mb-4">
+
+
+                        </div>
+
+
+
+
+
+
+
+
+                    </div>
+                    <!--Grid column-->
+
+                    <!--Grid column-->
+                    <div class="col-lg-4">
+
+                        <!-- Card -->
+                        <div class="card mb-4">
+                            <div class="card-body">
+
+                                <h5 class="mb-1">The total amount </h5>
+
+                                <ul class="list-group list-group-flush">
+
+
+                                    <li
+                                        class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 mb-1">
+                                        <div>
+                                            <strong>Total Cost</strong>
+
+                                        </div>
+                                        <span><strong>$<span th:text="${total}"></span></strong></span>
+                                    </li>
+                                </ul>
+
+                                <a th:href="@{/checkout}" h
+                                    class="btn btn-primary btn-block waves-effect waves-light">Go to
+                                    checkout</a>
+
+                            </div>
+
+
+                        </div>
+                        <!-- Card -->
+                        <div class="card mb-4">
+                            <div class="card-body">
+
+                            </div>
+                            <a href="/download/components-pdf" class="btn btn-primary">Download Components PDF</a>
+                        </div>
+
+                        <div class="card mb-4">
+                            <div class="card-body"
+                            th:style="${compatibilityCheck} ? 'background-color: #ccffcc;' : 'background-color: lightcoral;'">
+
+                                <a class="dark-grey-text d-flex justify-content-between" data-toggle="collapse"
+                                    href="#collapseExample" aria-expanded="false" aria-controls="collapseExample"
+                                    style="color:rgb(0, 0, 0)">
+                                    Check Compatibility
+                                    <span><i class="fas fa-chevron-down pt-1"></i></span>
+                                </a>
+
+                                <div class="collapse" id="collapseExample">
+
+                                    <div class="mt-3" style="padding: 15px;">
+                                        <h4>Power Supply</h4>
+                                        <span style="font-size: 16px; font-weight: 600;">Wattage Consumption: <span
+                                                th:text="${wattageConsumption}"></span>W</span><br>
+                                        <span style="font-size: 16px; font-weight: 600;">Wattage Supply: <span
+                                                th:text="${powerSupply}">0</span>W</span><br>
+                                        <span
+                                            th:text="${powerSupply > wattageConsumption} ? 'Looks good!' : 'Consider getting a higher supply!'"></span>
+                                    </div>
+                                    <div class="mt-3" style="padding: 15px;">
+                                        <h4>Single Components</h4>
+                                        <!-- <span style="font-size: 16px; font-weight: 600;">Quantities: <span
+                                                th:text="${numOfCPUs}"></span></span><br> -->
+                                        <p
+                                            th:text="${numOfCPUs == 1 } ? 'CPU looks good!' : 'Consider getting exactly 1 CPU!'">
+                                        </p>
+                                        <p
+                                            th:text="${numOfGPUs == 1 } ? 'GPU looks good!' : 'Consider getting exactly 1 GPU!'">
+                                        </p>
+                                        <p
+                                        th:text="${numOfPSUs == 1 } ? 'Supply Unit looks good!' : 'Consider getting exactly 1 PSU!'">
+                                       </p>
+                                        <p
+                                            th:text="${numOfBuildCases == 1 } ? 'Build Case looks good!' : 'Consider getting exactly 1 Case!'">
+                                        </p>
+                                        <p
+                                            th:text="${numOfCoolers == 1 } ? 'Cooler looks good!' : 'Consider getting exactly 1 Cooler!'">
+                                        </p>
+                                        <p
+                                            th:text="${numOfMotherboards == 1 } ? 'Motherboard looks good!' : 'Consider getting exactly 1 Motherboard!'">
+                                        </p>
+
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <!-- Card -->
+                        <!-- <div class="card mb-4">
+                        <div class="card-body">
+
+                            <a class="dark-grey-text d-flex justify-content-between" data-toggle="collapse" href="#collapseExample"
+                               aria-expanded="false" aria-controls="collapseExample">
+                                Add a discount code (optional)
+                                <span><i class="fas fa-chevron-down pt-1"></i></span>
+                            </a>
+
+                            <div class="collapse" id="collapseExample">
+                                <div class="mt-3">
+                                    <div class="md-form md-outline mb-0">
+                                        <input type="text" id="discount-code" class="form-control font-weight-light"
+                                               placeholder="Enter discount code">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div> -->
+                        <!-- Card -->
+
+                    </div>
+                    <!--Grid column-->
+
+                </div>
+                <!--Grid row-->
+
+            </section>
+            <!--Section: Block Content-->
+
+        </div>
+    </main>
+    <!--Main layout-->
+
+
+
+
+
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>

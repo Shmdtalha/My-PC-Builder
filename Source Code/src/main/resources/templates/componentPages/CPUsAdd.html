@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css"
+        integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+    <title>Add CPU</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+<style>
+        @import url('https://fonts.googleapis.com/css2?family=Sora:wght@700&display=swap');
+  .navbar {
+            box-shadow: var(--box-shadow);
+            font-family: Sora, "sans-serif";
+            line-height: 1.7;
+            color: var(--body);
+        }
+
+        .navbar.nav-link {
+            font-size: 14px;
+            font-weight: 700;
+        }
+                .disabled-button {
+            pointer-events: none;
+            opacity: 0.6;
+        }
+    </style>
+</head>
+
+<body>
+     <!--NAVBAR-->
+    <nav class="navbar navbar-expand-lg py-3 sticky-top bg-body-tertiary bg-white">
+        <div class="container">
+            <a class="navbar-brand" href="#"><b> MY PC BUILDER</b></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                    <li class="nav-item inactive">
+                        <a class="nav-link active" style="margin-right: 20px;" th:if="${userSession != null}">Hello
+                            <span th:text="${userSession.name}"></span>!</a>
+                    <li class="nav-item active">
+                    </li>
+                    <a class="nav-link" th:href="@{/}" href="#">Home</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" th:if="${isManager or isAdmin}" th:href="@{/manager}" href="#">Manage</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" th:href="@{/shop}" href="#">Shop</a>
+                    </li>
+
+                    <li class="nav-item active">
+                        <a class="nav-link" th:if="${userSession == null}" th:href="@{/login}" href="#">Login</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" th:if="${userSession != null}" th:href="@{/logout}" href="#">Logout</a>
+                    </li>
+
+                    <li class="nav-item active">
+                        <a class="nav-link" th:href="@{/build}" href="#">Build</a>
+                    </li>
+                    <li class="nav-item active">
+                        <span class="nav-link" th:text="${buildCount}">0</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!--NAVBAR end-->
+    <div class="container">
+        <!-- Add this right before the "Submit" button -->
+
+        <a th:href="@{/manager/components/CPU}" style="margin: 20px 0" class="btn"> <i class="fas fa-arrow-left"
+                style="margin-right: 5px;"></i> Components</a>
+
+
+
+
+        <h3>Add a new CPU</h3>
+        <form th:action="@{/manager/components/CPU/add}" method="post" th:object="${CPUDTO}"
+            enctype="multipart/form-data">
+            <div class="row">
+                <div class="col-sm-5">
+
+                    <input type="hidden" name="id" th:field="*{id}">
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input type="text" class="form-control" required th:field="*{name}" name="name" id="name"
+                            placeholder="Enter name">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="price">Price</label>
+                        <input type="number" step=0.01 class="form-control" required th:field="*{price}" name="price"
+                            id="price" placeholder="Price">
+                    </div>
+                    <div class="form-group">
+                        <label for="quantity">Quantity</label>
+                        <input type="number" class="form-control" required th:field="*{quantity}" name="quantity"
+                            id="quantity" placeholder="Enter quantity">
+                    </div>
+                    <div class="form-group">
+                        <label for="manufacturerName">Manufacturer</label>
+                        <input type="text" class="form-control" required th:field="*{manufacturerName}"
+                            name="manufacturerName" id="manufacturerName" placeholder="Manufacturer Name">
+                    </div>
+                    <div class="form-group">
+                        <label for="wattageConsumption">Wattage Consumption</label>
+                        <input type="number" class="form-control" required th:field="*{wattageConsumption}"
+                            name="wattageConsumption" id="wattageConsumption" placeholder="Consumption">
+                    </div>
+                    <div class="form-group">
+                        <label for="officialSiteLink">Official Site</label>
+                        <input type="text" class="form-control" th:field="*{officialSiteLink}" name="officialSiteLink"
+                            id="officialSiteLink" placeholder="Official Website">
+                    </div>
+
+                </div>
+                <div class="col-sm-5">
+                    <div class="form-group">
+                        <label for="series">Series</label>
+                        <input type="text" class="form-control" required th:field="*{series}" name="series" id="series"
+                            placeholder="Eg. i7">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="generation">Generation</label>
+                        <input type="number" class="form-control" required th:field="*{generation}" name="generation"
+                            id="generation" placeholder="Eg. 13">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="model">Model</label>
+                        <input type="text" class="form-control" required th:field="*{model}" name="model" id="model"
+                            placeholder="Eg. 7500U">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="cores">Cores</label>
+                        <input type="number" class="form-control" required th:field="*{cores}" name="cores" id="cores"
+                            placeholder="Eg. 6">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="coreSpeed">Core Speed</label>
+                        <input type="number" step="0.01" class="form-control" required th:field="*{coreSpeed}"
+                            name="coreSpeed" id="coreSpeed" placeholder="Eg. GHz">
+                    </div>
+
+
+                    <p>CPU Image</p>
+                    <div class="custom-file">
+                        <input type="file" class="custom-file-input" name="componentImage"
+                            accept="image/jpeg, image/png" id="componentImage" />
+                        <label class="custom-file-label" for="componentImage">Choose file</label>
+                    </div>
+                    <div class="form-group">
+                        <img src="#" id="imgPreview" height="100px" width="100px"
+                            th:src="@{${'/componentImages/' + CPUDTO.imageName}}" style="margin-top: 20px" alt=" ">
+                    </div>
+                    <input type="hidden" name="imgName" th:value="${CPUDTO.imageName}">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+    <script>
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $('#imgPreview').attr('src', e.target.result).width(100).height(100);
+                }
+                reader.readAsDataURL(input.files[0])
+            }
+        }
+        $('#componentImage').change(function () {
+            readURL(this);
+        });
+        $(".custom-file-input").on("change", function () {
+            var fileName = $(this).val().split("\\").pop();
+            $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+        });
+    </script>
+</body>
+
+</html>
