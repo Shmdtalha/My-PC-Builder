@@ -26,8 +26,7 @@ List of 5 to 10 Main Features:
 8.	Build sharing (Enable users to save their build configurations and share them with others for feedback)
 9.	Cost estimator, which will calculate the total cost of the selected components, including taxes and shipping costs
 
-#Configurations
-My PC Builder
+# Configurations
 
 Softwares and Versions used:
 SpringBoot 3.0.5
