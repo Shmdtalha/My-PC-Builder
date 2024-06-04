@@ -37,7 +37,7 @@ SQL Server :19
 Visual Studio Code
 Visual Studio Code extensions: Language Support for Java(TM) by Red Hat  v1.18.0
 
-Note: This project has been tested on multiple computers with the following steps, therefore they should work. If you meet any difficulties, kindly email at shmdtalah@gmail.com.
+Note: This project has been tested on multiple computers with the following steps, therefore they should work. If you meet any difficulties, kindly email at shmdtalha@gmail.com.
 
 You have to follow these steps to run our project
 
